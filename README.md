@@ -62,3 +62,5 @@ migrations/           — Aerich
 Сводка для UI: `GET /inventory/snapshot`.
 
 Опционально: заголовок `Idempotency-Key` или `idempotency_key` в JSON.
+
+https://drive.google.com/file/d/1G6v8WRCbN1saBq3Sh4mbS0-JVG_140sE/view?usp=sharing
