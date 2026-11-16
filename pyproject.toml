@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "checkstock-backend"
+version = "0.1.0"
+description = "CheckStock — учёт остатков по ФФ, FBS/FBO"
+authors = ["Maksemqwe123 <Markovtsovmaxim@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "checkstock_backend" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "0.115.5"
+uvicorn = { version = "0.32.1", extras = ["standard"] }
+tortoise-orm = "0.21.7"
+asyncpg = "0.30.0"
+pydantic = "2.10.2"
+pydantic-settings = "2.6.1"
+jinja2 = "3.1.4"
+python-multipart = "0.0.17"
+aerich = "^0.7.2"
+
+[tool.poetry.scripts]
+app = "checkstock_backend.api.app:run"
+
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.aerich]
+tortoise_orm = "checkstock_backend.db.config.TORTOISE_ORM"
+location = "./migrations"
+src_folder = "./."

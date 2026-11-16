@@ -1,0 +1,56 @@
+x-common-variables: &common-variables
+  PG_HOST: db
+  PG_PORT: 5432
+  PG_USER: checkstock
+  PG_PASSWORD: checkstock
+  PG_DB: checkstock
+
+services:
+  db:
+    container_name: checkstock-db
+    image: postgres:latest
+    ports:
+      - "5440:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U checkstock -d checkstock"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+    environment:
+      POSTGRES_USER: checkstock
+      POSTGRES_PASSWORD: checkstock
+      POSTGRES_DB: checkstock
+    volumes:
+      - ./tmp/postgres-data:/var/lib/postgresql
+
+  app:
+    container_name: checkstock-app
+    platform: linux/amd64
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "aerich upgrade && poetry run app"
+    environment:
+      <<: *common-variables
+    ports:
+      - "4005:8000"
+    volumes:
+      - ./migrations:/app/migrations
+      - ./checkstock_backend:/app/checkstock_backend
+      - ./pyproject.toml:/app/pyproject.toml
+      - ./poetry.lock:/app/poetry.lock
+
+  front:
+    container_name: checkstock-front
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - app
+    restart: unless-stopped
+    ports:
+      - "4006:80"
