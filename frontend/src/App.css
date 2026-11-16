@@ -8,7 +8,6 @@
   --text: #1e2430;
   --muted: #5c6575;
   --total: #eef3ec;
-  --edit: #ebe4f7;
 }
 
 body {
@@ -166,20 +165,8 @@ table.grid {
   font-weight: 600;
 }
 
-.grid tbody tr.metric-edit td {
-  background: var(--edit);
-}
-
 .grid td .sku {
   font-weight: 600;
-}
-
-.cell-edit {
-  width: 4.5rem;
-  border: 1px solid #b8a8d8;
-  border-radius: 3px;
-  padding: 0.15rem 0.35rem;
-  text-align: right;
 }
 
 .status {

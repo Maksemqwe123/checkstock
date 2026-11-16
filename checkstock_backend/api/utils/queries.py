@@ -67,27 +67,3 @@ def _lbl(ff: FulfillmentCenter | None) -> str:
 
 async def operation_history(limit: int = 100) -> list[OperationLog]:
     return await OperationLog.all().order_by("-created").limit(limit)
-
-
-async def sku_totals() -> list[dict]:
-    products = await Product.filter(is_active=True).order_by("sku")
-    balances = await StockBalance.all()
-    by_product: dict = {}
-    for b in balances:
-        by_product.setdefault(b.product_id, []).append(b)
-
-    result = []
-    for p in products:
-        rows = by_product.get(p.id, [])
-        physical = sum(b.physical_qty for b in rows)
-        reserved = sum(b.reserved_fbs_qty for b in rows)
-        result.append(
-            {
-                "sku": p.sku,
-                "name": p.name,
-                "physical_total": physical,
-                "reserved_total": reserved,
-                "available_total": physical - reserved,
-            }
-        )
-    return result

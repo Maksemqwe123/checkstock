@@ -3,4 +3,5 @@ __pycache__/
 .env
 .venv/
 venv/
-pgdata/
+tmp/postgres-data/
+frontend/dist/
