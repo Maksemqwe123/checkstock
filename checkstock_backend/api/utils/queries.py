@@ -43,9 +43,15 @@ async def inventory_snapshot() -> dict:
     }
     transit_rows = []
     for t in in_transit:
-        product = await t.product
-        ff_from = await t.fulfillment_center_from
-        ff_to = await t.fulfillment_center_to
+        product = t.product
+        if not isinstance(product, Product):
+            product = await t.product
+        ff_from = t.fulfillment_center_from
+        if ff_from is not None and not isinstance(ff_from, FulfillmentCenter):
+            ff_from = await ff_from
+        ff_to = t.fulfillment_center_to
+        if ff_to is not None and not isinstance(ff_to, FulfillmentCenter):
+            ff_to = await ff_to
         transit_rows.append(
             {
                 "sku": product.sku if product else "?",
